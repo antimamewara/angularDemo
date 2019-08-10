@@ -15,13 +15,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FormsModule } from '@angular/forms';
-// import { DexieModule, DexieConfig } from 'ngx-dexie';
-// const config: DexieConfig = {
-//   databaseName: 'AppDatabase', // your database name here
-//   schema: {
-//     data: '++id,name'
-//   } // any schema of your choice
-// };
 
 @NgModule({
   declarations: [
@@ -41,7 +34,6 @@ import { FormsModule } from '@angular/forms';
     Ng2SearchPipeModule,
     FormsModule,
     RouterModule.forRoot(routes),
-    // DexieModule.forRoot(config)
   ],
   entryComponents: [
     FollowersListComponent
