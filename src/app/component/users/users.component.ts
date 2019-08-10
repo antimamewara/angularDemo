@@ -7,12 +7,36 @@ import { IUserService } from '../../iservices/iuser';
 })
 export class UsersComponent implements OnInit {
   userData: any;
+  userData1;
   constructor(
     @Inject('IUserService') private userService: IUserService
   ) { }
 
   ngOnInit() {
+    this.getAllData();
     this.getUsers();
+  }
+
+
+  /*
+* @method getAllData()
+* @desc used to get indexDb data Users.
+*/
+  getAllData(): any {
+    const request = self.indexedDB.open('EXAMPLE_DB', 1);
+    request.onsuccess = function (event) {
+      // get database from event
+      const db = event.target['result'];
+      // create transaction from database
+      const transaction = db.transaction('products', 'readwrite');
+      // // get store from transaction
+      const productsStore = transaction.objectStore('products');
+      // put products data in productsStore
+      // get all product
+      productsStore.getAll().onsuccess = function (e1) {
+        this.userData1 = e1.target.result;
+      };
+    };
   }
 
 
@@ -21,30 +45,6 @@ export class UsersComponent implements OnInit {
    * @desc used to get All Users.
  */
   getUsers(): void {
-
-
-    // if (self.indexedDB) {
-    //   console.log('IndexedDB is supported');
-    //   const request = self.indexedDB.open('EXAMPLE_DB', 1);
-    //   let db;
-    //   request.onsuccess = function (event) {
-    //     console.log('[onsuccess]', request.result);
-    //     console.log(request.result);
-    //   //  db = event.target.result; // === request.result
-    //     db = event.target; // === request.result
-    //     console.log(event);
-    //   };
-    //   request.onerror = function (event) {
-    //     console.log('[onerror]', request.error);
-    //   };
-    //  // db.createObjectStore(storeName, options);
-
-    //   request.onupgradeneeded = function(event) {
-    //    //  db = event.srcElement.;
-    //     const store = db.createObjectStore('products', {keyPath: 'id'});
-    // };
-
-    // }
     this.userService.getUser().subscribe(
       resp => {
         this.userData = resp;
@@ -65,4 +65,5 @@ export class UsersComponent implements OnInit {
       this.getUsers();
     }
   }
+
 }
