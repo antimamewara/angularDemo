@@ -6,5 +6,4 @@ export interface IUserService {
     getUser(): any;
     getFollowers(name): any;
     getRepositories(name): any;
-
 }

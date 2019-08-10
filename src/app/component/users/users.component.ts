@@ -8,6 +8,7 @@ import { IUserService } from '../../iservices/iuser';
 export class UsersComponent implements OnInit {
   userData: any;
   userData1;
+  username: string;
   constructor(
     @Inject('IUserService') private userService: IUserService
   ) { }

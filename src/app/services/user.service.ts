@@ -122,30 +122,5 @@ export class UserService implements IUserService {
     }
   }
 
-  getAllData() {
-    // const request = self.indexedDB.open('EXAMPLE_DB', 1);
-    // // console.log(request);
-    // request.onsuccess = function (event) {
-
-    //   // get database from event
-    //   const db = event.target['result'];
-    //   // create transaction from database
-    //   const transaction = db.transaction('products', 'readwrite');
-    //   // // get store from transaction
-    //   const productsStore = transaction.objectStore('products');
-    //   // console.log(productsStore);
-    //   // console.log(productsStore.getAll());
-    //   // console.log(productsStore.getAll()['result']);
-    //   // put products data in productsStore
-    //   // get all product
-    //   productsStore.getAll().onsuccess = function (e1) {
-    //     // console.log('[Transaction - GET] product with id 1', (e1.target.result));
-    //     this.usersListFromDb = e1.target.result;
-    //     return (this.usersListFromDb);
-    //     // console.log('[Transaction - GET] product with id 1', e1.target.result);
-    //   };
-
-    // };
-  }
 
 }
