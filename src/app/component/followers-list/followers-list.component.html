@@ -1,0 +1,22 @@
+<h1 mat-dialog-title *ngIf="type==='followers'">
+  Followers List : </h1>
+<h1 mat-dialog-title *ngIf="type==='repositories'">
+  Repositories List : </h1>
+<div mat-dialog-content>
+  <ul  *ngIf="type==='followers'">
+    <li *ngFor="let list of followerList">
+      <img src="{{list.avatar_url}}" width="80px"> {{list.login}}
+    </li>
+  </ul>
+  <ul *ngIf="type==='repositories'">
+    <li *ngFor="let list of RepositoriesList">
+      {{list.name}}
+    </li>
+  </ul>
+  
+  <!-- <cdk-virtual-scroll-viewport itemSize="10" class="example-viewport" *ngIf="type==='followers'">
+    <div *cdkVirtualFor="let list of items" class="example-item">
+      {{list | json }}
+      <img src="{{list.avatar_url}}" width="80px"> {{list.login}}</div>
+  </cdk-virtual-scroll-viewport> -->
+</div>

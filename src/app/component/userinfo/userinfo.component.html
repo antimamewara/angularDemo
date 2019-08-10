@@ -1,0 +1,26 @@
+
+  <h2 style="text-align:center">{{ userData ? userData.name : 'N/A' }} Profile</h2>
+  <div class="card">
+    <img src="{{userData ? userData.avatar_url : ''}}" alt="name" style="width:100%">
+    <h1>Name: {{ userData ? userData.name : 'N/A' }}</h1>
+    <p class="title">User-Type: {{ userData ? userData.type : 'N/A'}}</p>
+    <p class="title">Company: {{ userData ? userData.company : 'N/A' }}</p>
+    <p class="title">Email : {{ userData ? userData.email : 'N/A' }}</p>
+    <p class="title">Repositories : <a class="repositories" (click)="viewRepositories(userData.login)" >View Repositories </a></p>
+    <p>Location : {{ userData ? userData.location : 'N/A' }}</p>
+    <div style="margin: 24px 0;">
+      <a href="#">
+        <i class="fa fa-dribbble"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-twitter"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-linkedin"></i>
+      </a>
+      <a href="#">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </div>
+      <a (click)="openDialog(userData.login)" class="btn">Followers : {{ userData ? userData.followers : '' }}</a>
+  </div>
