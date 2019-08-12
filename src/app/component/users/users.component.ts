@@ -1,5 +1,6 @@
 import { Inject, Component, OnInit } from '@angular/core';
 import { IUserService } from '../../iservices/iuser';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -7,14 +8,13 @@ import { IUserService } from '../../iservices/iuser';
 })
 export class UsersComponent implements OnInit {
   userData: any;
-  userData1;
   username: string;
+  userData1;
   constructor(
     @Inject('IUserService') private userService: IUserService
   ) { }
 
   ngOnInit() {
-    this.getAllData();
     this.getUsers();
   }
 
@@ -24,22 +24,35 @@ export class UsersComponent implements OnInit {
 * @desc used to get indexDb data Users.
 */
   getAllData(): any {
-    const request = self.indexedDB.open('EXAMPLE_DB', 1);
-    request.onsuccess = function (event) {
-      // get database from event
-      const db = event.target['result'];
-      // create transaction from database
-      const transaction = db.transaction('products', 'readwrite');
-      // // get store from transaction
-      const productsStore = transaction.objectStore('products');
-      // put products data in productsStore
-      // get all product
-      productsStore.getAll().onsuccess = function (e1) {
-        this.userData1 = e1.target.result;
+    const data1 = [];
+    const request = self.indexedDB.open('EXAMPLE_DB', 2);
+    return Observable.create(obs => {
+      request.onsuccess = function (event) {
+        const db = event.target['result'];
+        // // get store from transaction
+        if (db.objectStoreNames['2'] === 'users') {
+          const transaction = db.transaction('users', 'readonly');
+          const productsStore = transaction.objectStore('users');
+          const data = productsStore.getAll();
+          data.onsuccess = function () {
+            obs.next(data.result);
+          };
+        }
       };
-    };
+    });
   }
 
+
+  /*
+   * @method getLocalData()
+   * @desc used to get local data Users.
+ */
+  getLocalData(): void {
+    this.getAllData().subscribe((res) => {
+      this.userData = res;
+
+    });
+  }
 
   /*
    * @method getUsers()
@@ -48,8 +61,10 @@ export class UsersComponent implements OnInit {
   getUsers(): void {
     this.userService.getUser().subscribe(
       resp => {
-        this.userData = resp;
-      });
+        if (resp) {
+          this.userData = resp;
+        }
+      }, error => { this.getLocalData(); });
   }
 
   /*
@@ -66,5 +81,4 @@ export class UsersComponent implements OnInit {
       this.getUsers();
     }
   }
-
 }

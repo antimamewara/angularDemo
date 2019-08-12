@@ -29,7 +29,6 @@ export class ApiService implements IApiService {
     let headers: any;
     headers = this.getHeaders();
     const request = this.http.get(`${this.apiUrl}/${path}`, headers);
-    // console.log(request);
     return request
       .pipe(map((res) => {
         if (res) {

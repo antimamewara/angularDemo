@@ -1,7 +1,6 @@
 <input type="text" placeholder="Search by Name" [(ngModel)]="username">
 <button (click)="getSearchesUsers(username)">Search </button>
 <mat-grid-list cols="5" rowHeight="1:1">
- 
   <mat-grid-tile *ngFor="let data of userData">
     <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column">
       <div fxFlex>
@@ -11,7 +10,7 @@
         {{data.login}}
       </div>
       <div fxFlex>
-        <a routerLink="./users/{{data.login}}">More info</a>
+        <a routerLink="../users/{{data.login}}">More info</a>
       </div>
     </div>
   </mat-grid-tile>

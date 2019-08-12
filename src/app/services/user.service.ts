@@ -8,7 +8,6 @@ import { test } from '@angular-devkit/core/src/virtual-fs/host';
 })
 export class UserService implements IUserService {
   db: any;
-  allItems: any;
   constructor(
     @Inject('IApiService') private apiService: IApiService,
     // private dexieService: DexieService
@@ -25,7 +24,7 @@ export class UserService implements IUserService {
     return this.apiService.getApi('users').pipe(
       map((resp) => {
         if (resp) {
-          this.addToIndexedDb(resp);
+          this.addToIndexedDb(resp, 'users');
           return resp;
         }
       }));
@@ -56,6 +55,7 @@ export class UserService implements IUserService {
     return this.apiService.getApi('users/' + name).pipe(
       map((resp) => {
         if (resp) {
+          this.addToIndexedDb(resp, 'usersbyid');
           return resp;
         }
       }));
@@ -71,6 +71,7 @@ export class UserService implements IUserService {
     return this.apiService.getApi('users/' + username + '/followers').pipe(
       map((resp) => {
         if (resp) {
+          this.addToIndexedDb(resp, 'followers');
           return resp;
         }
       }));
@@ -79,39 +80,51 @@ export class UserService implements IUserService {
   /**
  * @method getRepositories()
  * @desc used to get all Repositories details.
- * @param  :null.
+ * @param  :username.
  */
 
   getRepositories(username): any {
     return this.apiService.getApi('users/' + username + '/repos').pipe(
       map((resp) => {
         if (resp) {
+          this.addToIndexedDb(resp, 'repositories');
           return resp;
         }
       }));
   }
-
-  private addToIndexedDb(data) {
+  /**
+ * @method addToIndexedDb()
+ * @desc used to add data to indexDb.
+ * @param  :data.
+ */
+  private addToIndexedDb(data, storeName) {
     let db;
     let store;
     let transaction;
+    let productsStore;
     if (self.indexedDB) {
-      const request = self.indexedDB.open('EXAMPLE_DB', 1);
-      request.onupgradeneeded = function (e) {
-        // console.log(e);
-        db = e.target['result'];
-        // console.log(db);
-        store = db.createObjectStore('products', { keyPath: 'id' });
-        store.createIndex('products_id_unqiue', 'id', { unique: true });
-        transaction = db.transaction('products', 'readwrite');
-      };
+      const request = self.indexedDB.open('EXAMPLE_DB', 2);
       request.onsuccess = function (event) {
         // get database from event
         db = event.target['result'];
-        // create transaction from database
-        transaction = db.transaction('products', 'readwrite');
-        // // get store from transaction
-        const productsStore = transaction.objectStore('products');
+        if (storeName === 'repositories') {
+          transaction = db.transaction('repositories', 'readwrite');
+          // // get store from transaction
+          productsStore = transaction.objectStore('repositories');
+        } else if (storeName === 'followers') {
+          transaction = db.transaction('followers', 'readwrite');
+          // // get store from transaction
+          productsStore = transaction.objectStore('followers');
+        } else if (storeName === 'usersbyid') {
+          transaction = db.transaction('usersbyid', 'readwrite');
+          // // get store from transaction
+          productsStore = transaction.objectStore('usersbyid');
+        } else {
+          transaction = db.transaction('users', 'readwrite');
+          // // get store from transaction
+          productsStore = transaction.objectStore('users');
+        }
+
         // put products data in productsStore
         data.forEach(function (product) {
           const db_op_req = productsStore.add(product);
@@ -119,8 +132,17 @@ export class UserService implements IUserService {
           };
         });
       };
+      request.onupgradeneeded = function (e) {
+        db = e.target['result'];
+        store = db.createObjectStore('users', { keyPath: 'id' });
+        store.createIndex('products_id_unqiue', 'id', { unique: true });
+        store = db.createObjectStore('repositories', { keyPath: 'id' });
+        store.createIndex('products_id_unqiue1', 'id', { unique: true });
+        store = db.createObjectStore('followers', { keyPath: 'id' });
+        store.createIndex('products_id_unqiue2', 'id', { unique: true });
+        store = db.createObjectStore('usersbyid', { keyPath: 'id' });
+        store.createIndex('products_id_unqiue3', 'id', { unique: true });
+      };
     }
   }
-
-
 }
