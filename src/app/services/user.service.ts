@@ -80,7 +80,7 @@ export class UserService implements IUserService {
   /**
  * @method getRepositories()
  * @desc used to get all Repositories details.
- * @param  :username.
+ * @param  : userName.
  */
 
   getRepositories(username): any {
