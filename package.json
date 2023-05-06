@@ -42,7 +42,7 @@
     "cors": "~2.8.4",
     "ng2-search-filter": "^0.5.1",
     "rxjs": "~6.3.3",
-    "webpack-cli": "^2.1.4",
+    "webpack-cli": "^5.0.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
